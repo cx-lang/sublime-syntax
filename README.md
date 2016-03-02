@@ -1,2 +1,20 @@
-# sublime-syntax
-'*.sublime-syntax' files for PEGx, CX and PEG.js
+This package for Sublime Text 3 contains syntax highlighting (`*.sublime-syntax`) files for PEGx, CX and PEG.js
+
+# Installation
+
+It should be obvious, but Sublime Text 3 (Build 3103+) is required. This package is **not developed** for any other editors, including previous versions of Sublime Text.
+
+## Terminal/Command Prompt and Git
+
+  1) In Sublime Text 3, open the main menu 'Preferences' and click on 'Browse Packages...'
+  2) Open a terminal/cmd window for the directory that is now open.
+  3) Type: `git pull git://github.com/cx-lang/sublime-syntax cxl-syntax-bundle`
+
+## Package Control
+  
+  coming soon...
+
+License
+-------
+Copyright (c) 2016 [Futago-za Ryuu](http://github.com/futagoza), [Erispa](https://erispa.io/)<br>
+Licensed and distributed under the [The MIT License](http://opensource.org/licenses/MIT)
