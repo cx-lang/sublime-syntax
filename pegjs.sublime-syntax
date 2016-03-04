@@ -1,0 +1,61 @@
+%YAML 1.2
+---
+name: PEG.js
+file_extensions: ['pegjs']
+scope: source.pegjs
+
+contexts:
+
+  main:
+    - include: comments
+    - include: javascript
+
+  prototype:
+    - include: comments
+
+  comments:
+    - meta_scope: punctuation.definition.comment
+
+    - match: /\*\*(?!/)
+      scope: punctuation.definition.comment.begin
+      push:
+        - meta_scope: comment.block.documentation
+        - match: \*/
+          scope: punctuation.definition.comment.end
+          pop: true
+
+    - match: /\*
+      scope: punctuation.definition.comment.begin
+      push:
+        - meta_scope: comment.block
+        - match: \*/
+          scope: punctuation.definition.comment.end
+          pop: true
+
+    - match: //
+      scope: comment.line.double-slash
+      push:
+        - match: $\n?
+          pop: true
+
+  javascript:
+    - match: '{'
+      push: Packages/JavaScript/JavaScript.sublime-syntax
+      with_prototype:
+        - match: '}'
+          pop: true
+
+  string:
+    - match: ([\"\'])
+      scope: punctuation.definition.string.quoted.begin
+      push:
+        - meta_include_prototype: false
+        - meta_scope: string.quoted
+        - match: \n
+          scope: invalid.illegal.newline
+          pop: true
+        - match: \\.
+          scope: constant.character.escape
+        - match: \1
+          scope: punctuation.definition.string.quoted.end
+          pop: true
