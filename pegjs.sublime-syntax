@@ -9,13 +9,12 @@ variables:
 
 contexts:
 
-  main:
-    - include: comments
-    - include: javascript
-    - include: rule
-
   prototype:
     - include: comments
+
+  main:
+    - include: javascript
+    - include: rule
 
   comments:
     - meta_scope: punctuation.definition.comment
@@ -61,47 +60,30 @@ contexts:
 
         - match: '='
           scope: keyword.operator.assignment
-          set:
-            - include: expression
-            #- include: javascript
+          set: expression
 
-            - match: ';'
-              scope: keyword.operator.eos
-              pop: true
-
-          #set: main
+    - match: ';'
+      scope: punctuation.operator.eos
+      pop: true
 
   expression:
     - include: choice
-    #- include: action
-    #- include: sequence
-    #- include: labeled
-    #- include: prefixed-operation
+    - include: labeled
+    - include: prefixed-operation
     #- include: suffixed-operation
     #- include: primary-expression
 
   choice:
-    - include: action
     - match: '/'
       scope: keyword.operator.productiondivider
-      set: action
-
-  action:
-    - include: sequence
-    - include: javascript
-
-  sequence:
-    - include: labeled
+      set: expression
 
   labeled:
-    - match: ({{identifier}})\s*(:)\s*
+    - match: (({{identifier}})\s*(:)\s*)
       captures:
         1: variable.parameter.function
         2: keyword.operator.assign
-      set:
-        - include: prefixed-operation
-        - include: expression
-    - include: prefixed-operation
+      set: expression
 
   prefixed-operation:
     - match: ($|&|!)
@@ -114,6 +96,7 @@ contexts:
     - match: (\?|\*|\+)
       scope: keyword.operator.quantifier
       pop: true
+    - include: javascript
 
   primary-expression:
     - include: string
@@ -133,6 +116,7 @@ contexts:
       scope: punctuation.definition.parameters.begin
       push:
         - include: expression
+        - include: javascript
         - match: \)
           scope: punctuation.definition.parameters.end
           pop: true
@@ -156,6 +140,7 @@ contexts:
     - match: \[
       scope: keyword.operator.regex
       push:
+        - meta_include_prototype: false
         - match: \](i?)
           pop: true
 
