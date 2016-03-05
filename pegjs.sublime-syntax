@@ -4,11 +4,15 @@ name: PEG.js
 file_extensions: ['pegjs']
 scope: source.pegjs
 
+variables:
+  identifier: '[A-Za-z_$][A-Za-z_$0-9]+'
+
 contexts:
 
   main:
     - include: comments
     - include: javascript
+    - include: rule
 
   prototype:
     - include: comments
@@ -39,10 +43,98 @@ contexts:
           pop: true
 
   javascript:
-    - match: '{'
-      push: Packages/JavaScript/JavaScript.sublime-syntax
+    - meta_include_prototype: false
+    - match: \{
+      scope: meta.block.js
+      push: javascript.sublime-syntax
       with_prototype:
-        - match: '}'
+        - match: \}
+          pop: true
+
+  rule:
+    - meta_scope: meta.block.productionset
+
+    - match: \b({{identifier}})\b
+      scope: constant.name.function
+      push:
+        - include: string
+
+        - match: '='
+          scope: keyword.operator.assignment
+          set:
+            - include: expression
+            #- include: javascript
+
+            - match: ';'
+              scope: keyword.operator.eos
+              pop: true
+
+          #set: main
+
+  expression:
+    - include: choice
+    #- include: action
+    #- include: sequence
+    #- include: labeled
+    #- include: prefixed-operation
+    #- include: suffixed-operation
+    #- include: primary-expression
+
+  choice:
+    - include: action
+    - match: '/'
+      scope: keyword.operator.productiondivider
+      set: action
+
+  action:
+    - include: sequence
+    - include: javascript
+
+  sequence:
+    - include: labeled
+
+  labeled:
+    - match: ({{identifier}})\s*(:)\s*
+      captures:
+        1: variable.parameter.function
+        2: keyword.operator.assign
+      set:
+        - include: prefixed-operation
+        - include: expression
+    - include: prefixed-operation
+
+  prefixed-operation:
+    - match: ($|&|!)
+      scope: keyword.operator.prefixed
+      set: suffixed-operation
+    - include: suffixed-operation
+
+  suffixed-operation:
+    - include: primary-expression
+    - match: (\?|\*|\+)
+      scope: keyword.operator.quantifier
+      pop: true
+
+  primary-expression:
+    - include: string
+    - include: regex
+
+    - match: \.
+      scope: keyword.operator.any
+      #pop: true
+
+    - match: \b({{identifier}})\b
+      scope: entity.name.function
+      #pop: true
+
+    - include: semantic-predicate
+
+    - match: \(
+      scope: punctuation.definition.parameters.begin
+      push:
+        - include: expression
+        - match: \)
+          scope: punctuation.definition.parameters.end
           pop: true
 
   string:
@@ -59,3 +151,15 @@ contexts:
         - match: \1
           scope: punctuation.definition.string.quoted.end
           pop: true
+
+  regex:
+    - match: \[
+      scope: keyword.operator.regex
+      push:
+        - match: \](i?)
+          pop: true
+
+  semantic-predicate:
+    - match: (&|!)
+      scope: keyword.operator.predicate
+      set: javascript
