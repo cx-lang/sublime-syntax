@@ -14,6 +14,12 @@ It should be obvious, but Sublime Text 3 (Build 3103+) is required. This package
   
   coming soon...
 
+# Links
+  
+  * `pegjs.sublime-syntax` is based on [https://github.com/telyn/Sublime-PEGjs](https://github.com/telyn/Sublime-PEGjs)
+  * [https://github.com/pegjs/pegjs](https://github.com/pegjs/pegjs)
+  * [Sublime Text 3, build 3103+](https://www.sublimetext.com/)
+
 # License
 
 Copyright (c) 2016 [Futago-za Ryuu](http://github.com/futagoza), [Erispa](https://erispa.io/)<br>
