@@ -5,32 +5,17 @@ file_extensions: ['pegjs']
 scope: source.pegjs
 
 variables:
-  identifier: '[A-Za-z_$][A-Za-z_$0-9]+'
+  identifier: '[A-Za-z_][A-Za-z_\$0-9]+'
 
 contexts:
 
   prototype:
-    - include: comments
-
-  main:
-    - include: javascript
-    - include: rule
-
-  comments:
-    - meta_scope: punctuation.definition.comment
-
-    - match: /\*\*(?!/)
-      scope: punctuation.definition.comment.begin
-      push:
-        - meta_scope: comment.block.documentation
-        - match: \*/
-          scope: punctuation.definition.comment.end
-          pop: true
-
+    
     - match: /\*
       scope: punctuation.definition.comment.begin
       push:
         - meta_scope: comment.block
+        - meta_include_prototype: false
         - match: \*/
           scope: punctuation.definition.comment.end
           pop: true
@@ -38,49 +23,36 @@ contexts:
     - match: //
       scope: comment.line.double-slash
       push:
-        - match: $\n?
+        - meta_scope: comment.line
+        - meta_include_prototype: false
+        - match: \n
           pop: true
 
-  javascript:
-    - meta_include_prototype: false
-    - match: \{
-      scope: meta.block.js
-      push: javascript.sublime-syntax
-      with_prototype:
-        - match: \}
-          pop: true
-
-  rule:
-    - meta_scope: meta.block.productionset
-
-    - match: \b({{identifier}})\b
-      scope: constant.name.function
-      push:
-        - include: string
-
-        - match: '='
-          scope: keyword.operator.assignment
-          push:
-            - include: expression
-            - include: javascript
-
-    - match: ';'
-      scope: punctuation.terminator.statement
-      #pop: true
-
-  expression:
+  main:
     - include: labeled
+    - include: name
+    - include: assignment
     - include: regex
     - include: predicate
     - include: quantifier
     - include: choice
+    - include: javascript
     - include: string
+    - include: eos
 
   labeled:
     - match: ({{identifier}})(:)
       captures:
-        1: variable.parameter.function
+        1: variable.other
         2: keyword.operator.assign
+
+  name:
+    - match: \b({{identifier}})\b
+      scope: entity.name.function
+
+  assignment:
+    - match: '='
+      scope: keyword.operator.rule
 
   regex:
     - match: \[
@@ -91,7 +63,7 @@ contexts:
           pop: true
 
   predicate:
-    - match: ($|&|!)
+    - match: (\$|&|!)
       scope: keyword.operator.predicate
       #set: javascript
 
@@ -105,6 +77,16 @@ contexts:
     - match: '/'
       scope: keyword.operator.productiondivider
 
+  javascript:
+    - meta_include_prototype: false
+    - match: \{
+      scope: meta.block.js.begin
+      push: javascript.sublime-syntax
+      with_prototype:
+        - match: \}
+          scope: meta.block.js.end
+          pop: true
+
   string:
     - match: ([\"\'])
       scope: punctuation.definition.string.quoted.begin
@@ -114,8 +96,16 @@ contexts:
         - match: \n
           scope: invalid.illegal.newline
           pop: true
+        - match: \\u[0-9a-fA-F]{1,4}
+          scope: constant.character.escape.unicode
+          pop: true
         - match: \\.
-          scope: constant.character.escape
+          scope: constant.character.escape.untitled
         - match: \1
           scope: punctuation.definition.string.quoted.end
           pop: true
+
+  eos:
+    - match: ';'
+      scope: punctuation.terminator.statement
+      #pop: true
