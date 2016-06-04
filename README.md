@@ -4,10 +4,10 @@ This package for Sublime Text 3 contains syntax highlighting (`*.sublime-syntax`
 
 It should be obvious, but Sublime Text 3 (Build 3103+) is required. This package is **not developed** for any other editors, including previous versions of Sublime Text.
 
-## Terminal/Command Prompt and Git
+## Git
 
   - In Sublime Text 3, open the main menu 'Preferences' and click on 'Browse Packages...'
-  - Open a terminal/cmd window for the directory that is now open.
+  - Open a Terminal or Command Prompt window for the directory that is now open.
   - Type: `git clone git://github.com/cx-lang/sublime-syntax CXLang`
 
 ## Package Control
