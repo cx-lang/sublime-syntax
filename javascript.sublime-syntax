@@ -173,6 +173,8 @@ contexts:
       pop: true
 
   class_name:
+    - match: (?=\s*extends|{)
+      pop: true
     - match: ({{ident}})
       scope: entity.name.class.js
       set:
@@ -1157,7 +1159,7 @@ contexts:
           pop: true
 
   literal-jsx:
-    - match: (?<=\(|\{|\[|,|&&|\|\||\?|:|=|=>|\Wreturn|^return|^)(?=\s*<[_$a-zA-Z])
+    - match: (?<=\(|\{|\[|,|&&|\|\||\?|:|=|=>|\Wreturn|^return|\Wdefault|^)(?=\s*<[_$a-zA-Z])
       push:
         - meta_content_scope: meta.jsx.js
         - match: (?<=/>|>)
