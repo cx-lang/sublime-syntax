@@ -8,7 +8,7 @@ It should be obvious, but Sublime Text 3 (Build 3103+) is required. This package
 
   - In Sublime Text 3, open the main menu 'Preferences' and click on 'Browse Packages...'
   - Open a terminal/cmd window for the directory that is now open.
-  - Type: `git pull git://github.com/cx-lang/sublime-syntax cxl-syntax-bundle`
+  - Type: `git clone git://github.com/cx-lang/sublime-syntax CXLang`
 
 ## Package Control
   
