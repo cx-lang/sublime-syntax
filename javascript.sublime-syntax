@@ -1,8 +1,8 @@
 %YAML 1.2
 ---
-# based on JavaScript (Babel)
-name: JavaScript
-file_extensions: [js, es6]
+# http://www.sublimetext.com/docs/3/syntax.html
+name: JavaScript (Babel)
+file_extensions: [js, jsx, babel, es6]
 first_line_match: ^#!\s*/.*\b(node|js)$\n?
 scope: source.js
 
