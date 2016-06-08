@@ -96,11 +96,6 @@ contexts:
         - match: \n
           scope: invalid.illegal.newline
           pop: true
-        - match: \\u[0-9a-fA-F]{1,4}
-          scope: constant.character.escape.unicode
-          pop: true
-        - match: \\.
-          scope: constant.character.escape.untitled
         - match: \1
           scope: punctuation.definition.string.quoted.end
           pop: true
